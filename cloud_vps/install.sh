@@ -11,7 +11,11 @@ sudo apt-get update
 sudo apt-get install -y software-properties-common iptables iptables-persistent
 sudo add-apt-repository -y ppa:amnezia/ppa
 sudo apt-get update
-sudo apt-get install -y amneziawg-tools xl2tpd ppp strongswan
+sudo apt-get install -y amneziawg-tools xl2tpd ppp strongswan curl
+
+echo "Loading IPsec kernel modules..."
+sudo modprobe af_key esp4 ah4 || true
+echo -e "af_key\nesp4\nah4" | sudo tee /etc/modules-load.d/ipsec.conf >/dev/null
 
 # 2. Настройка xl2tpd
 echo "2. Настройка xl2tpd..."
@@ -78,6 +82,10 @@ conn L2TP-PSK-noNAT
     ike=aes128-sha1-modp2048,aes128-sha256-modp2048,aes256-sha256-modp2048,aes256-sha1-modp2048,aes256-sha1-modp1024,aes128-sha1-modp1536,aes128-sha1-modp1024,3des-sha1-modp1024,aes128-md5-modp1024,3des-md5-modp1024!
     esp=aes256-sha256,aes256-sha1,aes128-sha1,3des-sha1,aes128-md5,3des-md5!
 EOF
+
+PUBLIC_IP=$(curl -s ifconfig.me)
+sudo sed -i "s/left=%defaultroute/left=%defaultroute\n    leftid=$PUBLIC_IP/g" /etc/ipsec.conf
+
 
 sudo tee /etc/ipsec.secrets >/dev/null << 'EOF'
 : PSK "amnezia123"
