@@ -1,0 +1,5 @@
+awg0.conf
+.env
+*.zip
+*.log
+.DS_Store

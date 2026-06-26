@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  vpn-gateway:
+    build: .
+    container_name: amnezia-l2tp-gateway
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    ports:
+      - "1701:1701/udp"
+    volumes:
+      - ./awg0.conf:/etc/amnezia/awg0.conf:ro
+    restart: unless-stopped
