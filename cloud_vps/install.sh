@@ -75,8 +75,8 @@ conn L2TP-PSK-noNAT
     dpddelay=40
     dpdtimeout=130
     dpdaction=clear
-    ike=aes256-sha1-modp1024,aes128-sha1-modp1024,3des-sha1-modp1024!
-    esp=aes256-sha1,aes128-sha1,3des-sha1!
+    ike=aes128-sha1-modp2048,aes128-sha256-modp2048,aes256-sha256-modp2048,aes256-sha1-modp2048,aes256-sha1-modp1024,aes128-sha1-modp1536,aes128-sha1-modp1024,3des-sha1-modp1024,aes128-md5-modp1024,3des-md5-modp1024!
+    esp=aes256-sha256,aes256-sha1,aes128-sha1,3des-sha1,aes128-md5,3des-md5!
 EOF
 
 sudo tee /etc/ipsec.secrets >/dev/null << 'EOF'
